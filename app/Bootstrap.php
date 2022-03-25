@@ -36,13 +36,15 @@ class Bootstrap
 
 		$configurator->addConfig(__DIR__ . '/../vendor/simple-cms/core-module/config/config.neon');
 		$configurator->addConfig(__DIR__ . '/../vendor/simple-cms/box-module/config/config.neon');
-		$configurator->addConfig(__DIR__ . '/../vendor/simple-cms/file-module/config/config.neon');
+        $configurator->addConfig(__DIR__ . '/../vendor/simple-cms/file-module/config/config.neon');
+        $configurator->addConfig(__DIR__ . '/../vendor/simple-cms/gallery-module/config/config.neon');
 
 		$configurator->addConfig(__DIR__ . '/config/config.neon');
+        $configurator->addConfig(__DIR__ . '/config/datefilter.neon');
 		$configurator->addConfig(__DIR__ . '/config/server/local.neon');
 		$configurator->addParameters([
 			'rootDir' => dirname(__DIR__),
-			'wwwDir' => dirname(__DIR__) . '/www',
+			'wwwDir' => dirname(__DIR__) . '/www/w3',
 		]);
 
 		return $configurator;

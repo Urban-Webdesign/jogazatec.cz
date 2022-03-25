@@ -1,0 +1,28 @@
+{block #content}
+<section class="archive-page page">
+    <div class="container-fluid">
+        <div class="container">
+            <h1 n:block="title">{$category_name|capitalize} - archiv</h1>
+            {if (!empty($articles))}
+                <div class="articles-row mt-5">
+                    {foreach $articles as $article}
+                    <div class="new article">
+                        <a n:href="New:show $category_name, $article->slug">
+                            <img n:ifset="$article->cover" src="{$basePath}/upload/news/{$article->id}/{$article->cover}" class="img-fluid" alt="{$article->title}">
+                            <h3>{$article->title}</h3>
+                        </a>
+                        <time datetime="{$article->created|date:"Y-m-d"}">{$article->created|dayMonth}</time>
+                        {if $article->perex}
+                            {$article->perex|noescape|truncate:300}
+                        {elseif $article->content}
+                            {$article->content|noescape|truncate:300}
+                        {/if}
+                    </div>
+                    {/foreach}
+                </div>
+            {else}
+                <h4>Aktuálně nejsou k dispozici žádné novinky.</h4>
+            {/if}
+        </div>
+    </div>
+</section>

@@ -9,7 +9,28 @@ application:
 
 services:
 	router: App\RouterFactory::createRouter()
+	repository: App\Service\ProjectModelRepository
+	# Models
+	- App\Model\CategoryModel
+	- App\Model\NewModel
+	# Grids
+	- App\AdminModule\Grid\NewGrid\NewGridFactory
+	# Dashboard
+	admin.dashboard.newpanel: App\AdminModule\Dashboard\NewPanel\NewPanelFactory
 
 parameters:
 	customTemplatesDir: %appDir%/FrontModule/templates/
+	admin:
+		menu:
+			Novinky / Akce: [':Admin:New:', pencil]
+		dashboard:
+			NewPanel:
+				service: admin.dashboard.newpanel
+				size: 3
+				order: 50
+
+extensions:
+    dateFilterExtension: h4kuna\DateFilter\DI\DateFilterExtension
+    recaptcha: Contributte\ReCaptcha\DI\ReCaptchaExtension
+
 

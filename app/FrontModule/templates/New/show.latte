@@ -1,0 +1,32 @@
+{block #content}
+<section class="new-page page">
+    <div class="container">
+
+        <article class="detail">
+            {if $new !== NULL}
+                <div class="article-header">
+                    <time datetime="{$new->created|date:"Y-m-d"}">{$new->created|dayMonth}</time> | <a n:href="New:default $category_name">{$category_name|capitalize}</a>
+                </div>
+                <img n:if="$new->cover" class="cover img-thumbnail" src="{$basePath}/upload/news/{$new->id}/{$new->cover}" alt="{$new->title}">
+                <h1 n:block="title" class="mb-2">{$new->title}</h1>
+
+                <div class="new-content">
+                    {$new->content|noescape}
+                </div>
+
+                <h4 class="mt-5" n:if="!empty($images)">Galerie</h4>
+                <div n:if="!empty($images)" class="row">
+                    {foreach $images as $image}
+                    <a href="{$basePath}/upload/galleries/{$new->gallery_id}/{$image->name}" class="col-sm-6 col-md-4 col-lg-3" data-lightbox="gallery" data-name="{$image->name}">
+                        <img src="{$basePath}/upload/galleries/{$new->gallery_id}/thumbs/{$image->name}" class="lazyload img-thumbnail m-1" alt="{$image->title}">
+                    </a>
+                    {/foreach}
+                </div>
+                <a n:href="Homepage:default#{$category_name}" class="btn btn-info mt-4">Zpět na {$category_name}</a>
+            {else}
+                <h2>{if $category_name === 'akce'}Akci{else}Novinku{/if} se nepodařilo nalézt.</h2>
+                <a n:href="Homepage:default#{$category_name}" class="btn btn-primary mt-4">Zpět na {$category_name}</a>
+            {/if}
+        </article>
+    </div>
+</section>

@@ -1,3 +1,207 @@
 {block #content}
+<header class="header" id="uvod">
+    <div class="container">
+        <h1><strong>Jóga</strong> Žatec</h1>
+    </div>
 
+    <a class="scroll-down scroll" n:href="Homepage:#o-jogovne"><i class="fas fa-chevron-down"></i></a>
+</header>
+
+<section class="about" id="o-jogovne">
+    <div class="container">
+        <img src="{$basePath}/dist/img/img13.jpeg" class="img-fluid" alt="Petra Šmeráková - Jóga Žatec">
+        <div class="about-text">
+            <h2>O jógovně v Žatci</h2>
+            {box about}
+        </div>
+    </div>
+</section>
+
+<!--<img src="" alt="">-->
+
+<section class="news" id="novinky">
+    <div class="container-fluid">
+        <div class="container">
+            <h2>Novinky</h2>
+            {if (!empty($news))}
+                <div class="articles-row">
+                {foreach $news as $new}
+                    <div class="new article">
+                        <a n:href="New:show 'novinky', $new->slug">
+                            <img n:ifset="$new->cover" src="{$basePath}/upload/news/{$new->id}/{$new->cover}" class="img-fluid" alt="{$new->title}">
+                            <h3>{$new->title}</h3>
+                        </a>
+                        <time datetime="{$new->created|date:"Y-m-d"}">{$new->created|dayMonth}</time>
+                        {if $new->perex}
+                           {$new->perex|noescape|truncate:300}
+                        {elseif $new->content}
+                           {$new->content|noescape|truncate:300}
+                        {/if}
+                    </div>
+                {/foreach}
+                </div>
+                <a n:href="New:default 'novinky'" class="btn btn-primary mt-4">Archiv novinek</a>
+            {else}
+                <div class="alert alert-danger">Aktuálně nejsou k dispozici žádné novinky.</div>
+            {/if}
+        </div>
+    </div>
+</section>
+
+<section class="events" id="akce">
+    <div class="container">
+        <h2>Akce</h2>
+
+        <div class="events-grid">
+            <div class="future-events">
+                <h3>Blížící se akce</h3>
+                {if (!empty($futureEvents))}
+                <div class="articles-row">
+                {foreach $futureEvents as $event}
+                    <div class="event future article">
+                        {php $earlier = new \DateTime(date('Y-m-d'))}
+                        {php $later = new \DateTime($event->created)}
+                        {php $abs_diff = $later->diff($earlier)->format("%a")}
+                        {php
+                        if ($abs_diff < 1)
+                            $daysMessage = 'dnes';
+                        else if ($abs_diff == 1)
+                            $daysMessage = 'zítra';
+                        else if ($abs_diff < 5)
+                            $daysMessage = 'Za '. $abs_diff .' dny';
+                        else
+                            $daysMessage = 'Za '. $abs_diff .' dní';
+                        }
+
+                        <span class="days-to-event">{$daysMessage}</span>
+                        <a n:href="New:show 'akce', $event->slug"><h4>{$event->title}</h4></a>
+                        <img n:ifset="$event->cover" src="{$basePath}/upload/news/{$event->id}/{$event->cover}" class="img-fluid" alt="{$event->title}">
+                        <time datetime="{$event->created|date:"Y-m-d"}">{$event->created|dayMonth}</time>
+                        {if $event->perex}
+                            {$event->perex|noescape|truncate:200}
+                        {elseif $event->content}
+                            {$event->content|noescape|truncate:200}
+                        {/if}
+                        <a n:href="New:show 'akce', $event->slug" class="btn btn-block btn-info btn-sm mt-4">Detail akce</a>
+                    </div>
+                {/foreach}
+                </div>
+            {else}
+                <div class="alert alert-danger">Kalendář aktuálně neobsahuje žádné blížící se akce.</div>
+            {/if}
+            </div>
+            <div class="past-events">
+            <h3>Uplynulé akce</h3>
+            {if (!empty($pastEvents))}
+                <div class="articles-row">
+                {foreach $pastEvents as $event}
+                    <div class="event past article">
+                        <a n:href="New:show 'akce', $event->slug">
+                            <h4>{$event->title}</h4>
+                            <img n:ifset="$event->cover" src="{$basePath}/upload/news/{$event->id}/{$event->cover}" class="img-fluid" alt="{$event->title}">
+                        </a>
+                        <time datetime="{$event->created|date:"Y-m-d"}">{$event->created|dayMonth}</time>
+                        {if $event->perex}
+                            {$event->perex|noescape|truncate:400}
+                        {elseif $event->content}
+                            {$event->content|noescape|truncate:400}
+                        {/if}
+                    </div>
+                {/foreach}
+                </div>
+                <a n:href="New:default 'akce'" class="btn btn-secondary">Archiv akcí</a>
+            {else}
+                <div class="alert alert-danger">Kalendář aktuálně neobsahuje žádné proběhlé akce.</div>
+            {/if}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="pricing" id="cenik">
+    <div class="container">
+        <img src="{$basePath}/dist/img/img11.jpeg" class="img-fluid" alt="Jóga Žatec - lektorka Petra Šmeráková v jogírně">
+        <div class="content">
+            <h2>Ceník</h2>
+            {box pricing}
+        </div>
+    </div>
+</section>
+
+<section class="contact" id="kontakt">
+    <div class="container">
+        <h2>Kontaktní informace</h2>
+
+        <ul class="contact-list">
+            <li n:if="$vars->phone"><a href="tel:{$vars->phone}"><i class="fa-solid fa-phone"></i> {$vars->phone}</a></li>
+            <li><a n:if="$vars->email" href="mailto:$vars->email"><i class="fa-solid fa-at"></i> {$vars->email}</a></li>
+            <li><a href="https://mapy.cz/s/fuvezunona" target="_blank"><i class="fa-solid fa-location-dot"></i> třída Obránců míru 2767<br>438 01 Žatec</a></li>
+        </ul>
+
+        <div class="contact-grid">
+            <div class="contact-form">
+                <h3>Kontaktní formulář</h3>
+
+                {snippet flashes}
+                    {foreach $flashes as $flash}
+                        <div class="alert alert-{$flash->type} alert-dismissible fade show" style="max-width: 500px" role="alert">
+                            {$flash->message}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {/foreach}
+                {/snippet}
+
+                {snippet form}
+                    {form contactForm, class => 'row'}
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                {label name}{/label}
+                                {input name class => 'form-control'}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                {label email}{/label}
+                                {input email class => 'form-control'}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                {label message}{/label}
+                                {input message class => 'form-control', rows => 5}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <div n:name="recaptcha"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                {input submit class => 'btn btn-success ajax'}
+                            </div>
+                        </div>
+                    {/form}
+                {/snippet}
+            </div>
+
+            <div class="contact-map">
+                <h3>Kde nás najdete</h3>
+                <iframe id="map" style="border:none" data-src="https://frame.mapy.cz/s/cefodeveda"></iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+{block #scripts}
+    <script src="{$basePath}/scripts/netteForms.js"></script>
+	<script src="https://www.google.com/recaptcha/api.js?render=explicit"></script>
+	<script src="{$basePath}/scripts/invisibleRecaptcha.js"></script>
 {/block}
