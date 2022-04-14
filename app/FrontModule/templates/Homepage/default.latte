@@ -109,7 +109,7 @@
                     </div>
                 {/foreach}
                 </div>
-                <a n:href="New:default 'akce'" class="btn btn-secondary">Archiv akcí</a>
+                <a n:href="New:default 'akce'" class="btn btn-secondary mt-4">Archiv akcí</a>
             {else}
                 <div class="alert alert-danger">Kalendář aktuálně neobsahuje žádné proběhlé akce.</div>
             {/if}
@@ -135,7 +135,7 @@
 
         <ul class="contact-list">
             <li n:if="$vars->phone"><a href="tel:{$vars->phone}"><i class="fa-solid fa-phone"></i> {$vars->phone}</a></li>
-            <li><a n:if="$vars->email" href="mailto:$vars->email"><i class="fa-solid fa-at"></i> {$vars->email}</a></li>
+            <li><a n:if="$vars->email" href="mailto:{$vars->email}"><i class="fa-solid fa-at"></i> {$vars->email}</a></li>
             <li><a href="https://mapy.cz/s/fuvezunona" target="_blank"><i class="fa-solid fa-location-dot"></i> třída Obránců míru 2767<br>438 01 Žatec</a></li>
         </ul>
 
