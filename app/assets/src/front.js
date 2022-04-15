@@ -70,6 +70,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     $(document).ready(function(){
+        //gdpr
+        $(".gdpr button").click(function() {
+            var date = new Date();
+            date.setFullYear(date.getFullYear() + 10);
+            document.cookie = "gdpr=1; path=/; expires=" + date.toGMTString();
+            $(".gdpr").hide();
+        });
 
         // smooth scroll
         // Add smooth scrolling to all links

@@ -1,7 +1,10 @@
 {block #content}
 <header class="header" id="uvod">
-    <div class="container">
-        <h1><strong>Jóga</strong> Žatec</h1>
+    <div class="header-logo">
+        <div class="img-bg">
+            <img src="{$basePath}/dist/img/logo_bigger.png" alt="Jóga Žatec - logo">
+        </div>
+        <a n:href="Homepage:reservation" class="btn btn-secondary">Rezervovat lekci!</a>
     </div>
 
     <a class="scroll-down scroll" n:href="Homepage:#o-jogovne"><i class="fas fa-chevron-down"></i></a>
@@ -137,6 +140,8 @@
             <li n:if="$vars->phone"><a href="tel:{$vars->phone}"><i class="fa-solid fa-phone"></i> {$vars->phone}</a></li>
             <li><a n:if="$vars->email" href="mailto:{$vars->email}"><i class="fa-solid fa-at"></i> {$vars->email}</a></li>
             <li><a href="https://mapy.cz/s/fuvezunona" target="_blank"><i class="fa-solid fa-location-dot"></i> třída Obránců míru 2767<br>438 01 Žatec</a></li>
+            <li><a href="https://rejstrik.penize.cz/ares/88175278-ing-petra-smerakova" target="_blank"><i class="fa-solid fa-id-card"></i>IČO 88175278</a></li>
+            <li><a href="#kontakt"><i class="fa-solid fa-credit-card"></i>č.ú. 2701773793/2010</a></li>
         </ul>
 
         <div class="contact-grid">
@@ -156,6 +161,7 @@
 
                 {snippet form}
                     {form contactForm, class => 'row'}
+                        {input protiBotum}
                         <div class="col-lg-6">
                             <div class="form-group">
                                 {label name}{/label}
@@ -177,15 +183,12 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <div n:name="recaptcha"></div>
-                            </div>
-                        </div>
-
                         <div class="col-lg-6">
-                            <div class="form-group">
-                                {input submit class => 'btn btn-success ajax'}
+                            <div class="form-group d-inline-flex align-items-center">
+                                <div class="spinner-border spinner-contact mr-3" style="display: none;" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                {input submit class => 'btn btn-success ajax submit-contactForm'}
                             </div>
                         </div>
                     {/form}
@@ -194,6 +197,7 @@
 
             <div class="contact-map">
                 <h3>Kde nás najdete</h3>
+                <p><a href="https://en.mapy.cz/zakladni?x=13.5472958&y=50.3258339&z=17&q=t%C5%99%C3%ADda%20Obr%C3%A1nc%C5%AF%20m%C3%ADru%202767%2C%20438%2001%20%C5%BDatec%2C%20%C4%8Cesk%C3%A1%20Republika&source=addr&id=9966898&ds=2" target="_blank"><i class="fa-solid fa-map-location"></i> 13.5472958 50.3258339</a><br>(budova bývalé České pojišťovny, vchod zezadu, 1. patro)</p>
                 <iframe id="map" style="border:none" data-src="https://frame.mapy.cz/s/cefodeveda"></iframe>
             </div>
         </div>
@@ -204,4 +208,19 @@
     <script src="{$basePath}/scripts/netteForms.js"></script>
 	<script src="https://www.google.com/recaptcha/api.js?render=explicit"></script>
 	<script src="{$basePath}/scripts/invisibleRecaptcha.js"></script>
+
+	<script type="application/javascript">
+		var contactForm = document.querySelector('#frm-contactForm');
+		var submitContact = contactForm.querySelector('.submit-contactForm');
+		var spinnerContact = contactForm.querySelector('.spinner-contact');
+
+		submitContact.addEventListener('click', () => {
+			submitContact.disabled = true;
+			spinnerContact.style.display = 'block';
+			setTimeout(() => {
+				submitContact.disabled = false;
+				spinnerContact.style.display = 'none';
+			}, 3000);
+		});
+	</script>
 {/block}
