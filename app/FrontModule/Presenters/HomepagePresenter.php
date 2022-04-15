@@ -25,7 +25,7 @@ class HomepagePresenter extends BasePresenter
 
         $today = date('Y-m-d');
         $this->template->futureEvents = $this->newModel->getFutureEvents($today);
-        $this->template->pastEvents = $this->newModel->getPastEvents($today);
+        $this->template->pastEvents = $this->newModel->getPastEvents($today)->limit(1);
 
 
 
@@ -41,6 +41,8 @@ class HomepagePresenter extends BasePresenter
     {
         $form = new Form();
 
+        $form->addHidden('protiBotum');
+
         $form->addText('name', 'Jméno a příjmení')
             ->addRule(Form::MAX_LENGTH, 'Maximální délka je %s znaků', 100)
             ->setRequired('Musíte zadat Vaše jméno a příjmení.');
@@ -53,51 +55,59 @@ class HomepagePresenter extends BasePresenter
             ->addRule($form::MAX_LENGTH, 'Zpráva je příliš dlouhá', 5000)
             ->setRequired('Obsah zprávy nemůže zůstat prázdný.');
 
-//        $form->addInvisibleReCaptcha('recaptcha')
-//            ->setMessage('Jste opravdu člověk?');
-
-        $form->addReCaptcha('recaptcha', $label = 'Captcha', $required = TRUE, $message = 'Are you a bot?');
-
         $form->addSubmit('submit', 'Odeslat zprávu');
 
         $form->onSubmit[] = function (Form $form) {
             try {
                 $values = $form->getValues();
 
-                $mail = new Message();
+                bdump($values);
+                if ($values['protiBotum'] === "") {
 
-                $vars = $this->configuration->getAllVars();
-                if (isset($vars['email']))
-                    $ownersEmail = $vars['email'];
-                else
-                    $ownersEmail = 'info@filipurban.cz';
+                    $mail = new Message();
 
-                $mail->setFrom($values['email'], $values['name'])
-                    ->addTo($ownersEmail)
-                    ->setSubject('JógaŽatec.cz - zpráva z kontaktního formuláře')
-                    ->setBody($values['message']);
+                    $vars = $this->configuration->getAllVars();
+                    if (isset($vars['email']))
+                        $ownersEmail = $vars['email'];
+                    else
+                        $ownersEmail = 'info@filipurban.cz';
 
-                $parameters = Neon::decode(file_get_contents(__DIR__ . "/../../config/server/local.neon"));
+                    $mail->setFrom($values['email'], $values['name'])
+                        ->addTo($ownersEmail)
+                        ->setSubject('JógaŽatec.cz - zpráva z kontaktního formuláře')
+                        ->setBody($values['message']);
 
-                $mailer = new SmtpMailer([
-                    'host' => $parameters['mail']['host'],
-                    'username' => $parameters['mail']['username'],
-                    'password' => $parameters['mail']['password'],
-                    'secure' => $parameters['mail']['secure'],
-                ]);
+                    $parameters = Neon::decode(file_get_contents(__DIR__ . "/../../config/server/local.neon"));
 
-                $mailer->send($mail);
+                    $mailer = new SmtpMailer([
+                        'host' => $parameters['mail']['host'],
+                        'username' => $parameters['mail']['username'],
+                        'password' => $parameters['mail']['password'],
+                        'secure' => $parameters['mail']['secure'],
+                    ]);
 
-                $this->flashMessage('Email byl úspěšně odeslán!', 'info');
+                    $mailer->send($mail);
 
-                if ($this->isAjax()) {
-                    $this->redrawControl('flashes');
-                    $this->redrawControl('form');
-                    $form->setValues([], TRUE);
+                    $this->flashMessage('Email byl úspěšně odeslán!', 'info');
+
+                    if ($this->isAjax()) {
+                        $this->redrawControl('flashes');
+                        $this->redrawControl('form');
+                        $form->setValues([], TRUE);
+                    } else {
+                        $this->redirect('this#kontakt');
+                    }
                 } else {
-                    $this->redirect('this#kontakt');
-                }
+                    $this->flashMessage('Boti nic posílat nesmějí!', 'danger');
 
+                    if ($this->isAjax()) {
+                        $this->redrawControl('flashes');
+                        $this->redrawControl('form');
+                        $form->setValues([], TRUE);
+                    } else {
+                        $this->redirect('this#kontakt');
+                    }
+                }
             } catch (SmtpException $e) {
                 $this->flashMessage('Vaši zprávu se nepodařilo odeslat. Kontaktujte prosím správce webu na info@filipurban.cz', 'danger');
             }

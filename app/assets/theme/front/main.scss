@@ -118,11 +118,9 @@ body {
 
 	.navbar-brand {
 		text-align: center;
-		font-size: 1.5rem;
-		line-height: 1.6rem;
 
-		strong {
-			display: block;
+		img {
+			max-width: 150px;
 		}
 	}
 
@@ -153,7 +151,7 @@ body {
 .scroll-top {
 	display: none;
 	position: fixed;
-	bottom: 1rem;
+	bottom: 6rem;
 	right: .5rem;
 	z-index: 100;
 	border-radius: 50%;
@@ -223,11 +221,31 @@ h2 {
 		top: 0;
 		left: 0;
 		z-index: -1;
-		//background: linear-gradient(to bottom right, rgba($jg-blue, 0.3) 0%, rgba($jg-orange, 0.55) 100%);
+		background: linear-gradient(to bottom right, rgba($white, 0.3) 0%, rgba($white, 0.9) 100%);
 	}
 
-	.container {
+	.header-logo {
 		z-index: 30;
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		align-items: center;
+		gap: 3rem;
+
+		.img-bg {
+			//background-color: rgba($white, 0.5);
+			border-radius: 100%;
+			//padding: 1.5rem;
+			max-width: 200px;
+		}
+
+		img {
+			position: relative;
+			left: 7px;
+			top: 7px;
+			width: 100%;
+		}
+
 	}
 
 	h1 {
@@ -249,8 +267,8 @@ h2 {
 		left: 50%;
 		transform: translateX(-50%);
 		transition: all .25s ease-in-out;
-		color: $white;
-		opacity: .7;
+		color: $primary;
+		opacity: .8;
 
 		&:hover {
 			opacity: 1;
@@ -589,9 +607,9 @@ section {
 
 		iframe {
 			position: relative;
-			width: 100%;
-			height: calc(100% - 3rem);
-			min-height: 250px;
+			width: calc(100% - 3rem);
+			height: calc(100% - 8rem);
+			min-height: 200px;
 		}
 	}
 
@@ -599,16 +617,30 @@ section {
 // FOOTER
 footer {
 	width: 100vw;
-	height: 200px;
+	min-height: 200px;
+	padding: 3rem 0;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-	background: rgba($jg-green, 0.85);
+	background: $jg-green;
 	color: $white;
 
+	.container {
+		display: flex;
+		flex-direction: column;
+		gap: 3rem;
+	}
+
 	.author {
-		text-align: center;
+		order: 2;
+	}
+
+	.footer-links {
+		order: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 3rem;
 	}
 
 	svg {
@@ -617,5 +649,29 @@ footer {
 		height: 70px;
 		width: auto;
 		display: block;
+	}
+}
+
+
+// GDPR
+.gdpr {
+	width: calc(100% - 2rem);
+	max-width: 450px;
+	position: fixed;
+	right: 1rem;
+	bottom: 1rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	padding: 1.5rem;
+	color: $darkgray;
+	background-color: #e5fad8;
+	z-index: 1000;
+	border-radius: $border-radius;
+
+	i {
+		color: $brown;
+		font-size: 1.5rem;
 	}
 }

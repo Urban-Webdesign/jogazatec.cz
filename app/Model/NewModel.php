@@ -28,7 +28,7 @@ class NewModel extends BaseModel
 
     public function getPastEvents(string $today): Selection
     {
-        return $this->getTable()->where('public', 1)->where('created <', $today)->where('category_id', 2)->order('created DESC')->limit(1);
+        return $this->getTable()->where('public', 1)->where('created <', $today)->where('category_id', 2)->order('created DESC');
     }
 
 
